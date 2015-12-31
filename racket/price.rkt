@@ -46,5 +46,5 @@
   (* (list-ref price-list subclass) ilevel))
 
 ; Final price with 1 gold random
-(define (final-price class subclass quality ilevel)
-  (+ (random 10000) (get-price subclass ilevel (get-price-list class quality))))
+(define (final-price class subclass quality ilevel stack)
+  (* (+ (random 10000) (get-price subclass ilevel (get-price-list class quality))) stack))

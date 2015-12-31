@@ -31,5 +31,8 @@
   (query-maybe-value
    world (string-append "SELECT" field "FROM `item_template` WHERE " cond ";")))
 
+(define (select-single-world query)
+  (query-maybe-value world query))
+
 (define (select-single-character query)
   (query-maybe-value character query))
