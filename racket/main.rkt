@@ -68,13 +68,14 @@
           (define single-stack-item?
             (string?(findf (lambda (i) (string=? (number->string item) i))
                            single-stack-list)))]
-    (if single-stack-item?
+    (if (or single-stack-item?
+            (= 1 (get-stack-count item)))
         1
-    (cond [(= rnd 0) 1]
-          [(= rnd 1) 5]
-          [(= rnd 2) 10]
-          [(= rnd 3) 15]
-          [(= rnd 4) 20]))))
+        (cond [(= rnd 0) 1]
+              [(= rnd 1) 5]
+              [(= rnd 2) 10]
+              [(= rnd 3) 15]
+              [(= rnd 4) 20]))))
 ;  (local [(define list-of-divisors (list 1 2))
 ;          (define rnd-number (random (length list-of-divisors)))]
 ;  (if (even? stackable)
@@ -89,12 +90,15 @@
           (define stack (make-stack item (item-data-stackable i-data)))
           (define price (make-price item stack i-data))]
     (string-append
-     "\nINSERT INTO characters.item_instance (guid, itemEntry, count, enchantments) VALUES ("
+     "INSERT INTO characters.item_instance
+(guid, itemEntry, count, enchantments) VALUES ("
      (number->string guid) ", "
      (number->string item) ", "
      (number->string stack) ", "
-     "\"0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\");"
-     "\nINSERT INTO characters.auctionhouse (id, houseid, itemguid, itemowner, buyoutprice, time, buyguid, lastbid, startbid, deposit) VALUES ("
+     "\"0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\");"
+     "\nINSERT INTO characters.auctionhouse (id, houseid, itemguid, itemowner,
+ buyoutprice, time, buyguid, lastbid, startbid, deposit) VALUES ("
      (number->string (make-id item)) ", "
      "7, " ;houseid 7 = neutral gadgetzan
      (number->string guid) ", "
@@ -104,15 +108,17 @@
      "0, "
      "0, "
      (number->string (make-bid-price price)) ", "
-     "0);")))
+     "0);\n")))
 
 ; Integer -> Strings (Queries)
 ; Given the entry for the item, generate multiple auction queries.
 (define (make-result entry)
   (local [(define i-data (get-item-data entry))
-          (define count (random(add1(get-price-list (item-data-class i-data)
-                                                    (item-data-quality i-data)
-                                                    items-multiplier-maxcount))))]
+          (define count (random
+                         (add1(get-price-list
+                               (item-data-class i-data)
+                               (item-data-quality i-data)
+                               items-multiplier-maxcount))))]
     (for/list ([i count])(make-query-auction entry))))
 
 ; output

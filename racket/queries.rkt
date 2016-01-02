@@ -42,11 +42,12 @@
 (define (get-item-data entry)
   (local [(define data
             (vector->list
-                 (query-row
-                  world
-                  (string-append "SELECT class, subclass, quality, itemlevel, stackable "
-                                 "FROM world.item_template WHERE entry = "
-                                 (number->string entry) ";"))))]
+             (query-row
+              world
+              (string-append
+               "SELECT class, subclass, quality, itemlevel, stackable "
+               "FROM world.item_template WHERE entry = "
+               (number->string entry) ";"))))]
     (make-item-data (first data)
                     (second data)
                     (third data)
@@ -59,21 +60,21 @@
   (cond [(list? subclass)
          (map (lambda (q)
                 (map (lambda (s)
-                     (list-of-items class s q ilvlmin ilvlmax)) subclass))
-                quality)]
+                       (list-of-items class s q ilvlmin ilvlmax)) subclass))
+              quality)]
         [(number? subclass)
          (for/list
              ([i subclass])
-              (map (lambda (q)
-                     (list-of-items class i q ilvlmin ilvlmax)) quality))]))
+           (map (lambda (q)
+                  (list-of-items class i q ilvlmin ilvlmax)) quality))]))
 
-; Create a list with the result of the query.
+; Create a list using the result of the query.
 (define (get-items conditions)
   (flatten(map vector->list
-       (query-rows
-        world
-        (string-append "SELECT CAST(entry AS CHAR(20))"
-                       " FROM item_template WHERE " conditions ";")))))
+               (query-rows
+                world
+                (string-append "SELECT CAST(entry AS CHAR(20))"
+                               " FROM item_template WHERE " conditions ";")))))
 
 ; Execute a query on the 'world' database.
 (define (select-single-world query)
