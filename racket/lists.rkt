@@ -20,16 +20,16 @@
                                UNUSED   ; Parts 1
                                UNUSED   ; Explosives 2
                                UNUSED   ; Devices 3
-                               1000     ; Jewelcrafting 4
-                               150      ; Cloth 5
-                               450      ; Leather 6
-                               800      ; Metal & Stone 7
+                               UNUSED     ; Jewelcrafting 4
+                               7      ; Cloth 5
+                               10      ; Leather 6
+                               15      ; Metal & Stone 7
                                UNUSED   ; Meat 8
-                               350      ; Herb 9
-                               400      ; Elemental 10
+                               5      ; Herb 9
+                               10      ; Elemental 10
                                UNUSED   ; Other 11
-                               300      ; Enchanting 12
-                               300      ; Materials 13
+                               10      ; Enchanting 12
+                               10      ; Materials 13
                                UNUSED   ; Armor Ench. 14
                                UNUSED   ; Weapon Ench. 15
                                )))
@@ -43,16 +43,16 @@
                                UNUSED   ; Parts 1
                                UNUSED   ; Explosives 2
                                UNUSED   ; Devices 3
-                               2000     ; Jewelcrafting 4
-                               600      ; Cloth 5
-                               800      ; Leather 6
-                               1500     ; Metal & Stone 7
+                               UNUSED     ; Jewelcrafting 4
+                               60      ; Cloth 5
+                               80      ; Leather 6
+                               150     ; Metal & Stone 7
                                UNUSED   ; Meat 8
-                               600      ; Herb 9
-                               1600     ; Elemental 10
+                               60      ; Herb 9
+                               160     ; Elemental 10
                                UNUSED   ; Other 11
-                               300      ; Enchanting 12
-                               400      ; Materials 13
+                               30      ; Enchanting 12
+                               40      ; Materials 13
                                UNUSED   ; Armor Ench. 14
                                UNUSED   ; Weapon Ench. 15
                                )))
@@ -66,16 +66,16 @@
                                UNUSED   ; Parts 1
                                UNUSED   ; Explosives 2
                                UNUSED   ; Devices 3
-                               3000     ; Jewelcrafting 4
-                               300      ; Cloth 5
-                               1800     ; Leather 6 basically arctic fur
-                               1700     ; Metal & Stone 7
+                               UNUSED     ; Jewelcrafting 4
+                               30      ; Cloth 5
+                               180     ; Leather 6 basically arctic fur
+                               170     ; Metal & Stone 7
                                UNUSED   ; Meat 8
-                               700      ; Herb 9
-                               900      ; Elemental 10
+                               70      ; Herb 9
+                               90     ; Elemental 10
                                UNUSED   ; Other 11
-                               1000     ; Enchanting 12
-                               450      ; Materials 13
+                               100     ; Enchanting 12
+                               45      ; Materials 13
                                UNUSED   ; Armor Ench. 14
                                UNUSED   ; Weapon Ench. 15
                                )))
@@ -89,16 +89,16 @@
                                UNUSED   ; Parts 1
                                UNUSED   ; Explosives 2
                                UNUSED   ; Devices 3
-                               4000     ; Jewelcrafting 4
-                               300      ; Cloth 5
-                               1400     ; Leather 6
-                               1500     ; Metal & Stone 7
+                               UNUSED     ; Jewelcrafting 4
+                               30      ; Cloth 5
+                               140     ; Leather 6
+                               150     ; Metal & Stone 7
                                UNUSED   ; Meat 8
-                               1000     ; Herb 9
-                               1400     ; Elemental 10
+                               100     ; Herb 9
+                               120     ; Elemental 10
                                UNUSED   ; Other 11
-                               2000     ; Enchanting 12
-                               450      ; Materials 13
+                               140     ; Enchanting 12
+                               45      ; Materials 13
                                UNUSED   ; Armor Ench. 14
                                UNUSED   ; Weapon Ench. 15
                                )))
@@ -123,30 +123,30 @@
    ; If you won't use a certain subclass, write UNUSED.
    ; You MUST write every subclass.
    (list UNUSED   ; 0 Miscellaneous
-         10000    ; 1 Cloth
-         10000    ; 2 Leather 
-         10000    ; 3 Mail
-         10000    ; 4 Plate
+         1000    ; 1 Cloth
+         1000    ; 2 Leather 
+         1000    ; 3 Mail
+         1000    ; 4 Plate
          UNUSED   ; 5 Buckler (OBSOLETE)
-         10000    ; 6 Shield
-         10000    ; 7 Libram
-         10000    ; 8 Idol
-         10000    ; 9 Totem
-         10000    ; 10 Sigil
+         1000    ; 6 Shield
+         1000    ; 7 Libram
+         1000    ; 8 Idol
+         1000    ; 9 Totem
+         1000    ; 10 Sigil
          )))
 
 ; A list of the default quality values in auctions.
 (define default-quality
   (list 1 2 3 4))
 
-; A list of lists: the first element is the ID, the second the multiplier.
-; You can add pairs to this list in order to create a specific multiplier for a
+; A list of lists: the first element is the ID, the second the price.
+; You can add pairs to this list in order to create a specific price for a
 ; single item.
 ; This will overwrite the modifier above for that item.
 (define fixed-price-list
   (append (list)
-          (list '(34055 200)
-                '(34056 300))))
+          (list '(34055 20000)
+                '(34056 30000))))
 
 ; A list containing every item that should have only one stack.
 ; You can add items to this list to force their maximum stack to 1.
@@ -163,14 +163,14 @@
   (flatten
    (foldr append (list)
           (list (data->list 7 
-                            (list 4 5 6 7 9 10 12 13)
+                            (list 5 6 7 9 10 12 13)
                             default-quality 70 80)
                 (data->list ; How data->list works:
-                 4          ; First, we write the class of the items we wan
+                 4          ; First, we write the class of the items we want
                  (list 2)   ; Then their subclasses (in a list)
                  (list 4)   ; Their qualities (in a list)
-                 230        ; The minimum item level (included)
-                 276)))))   ; The maximum item level (included)
+                 0          ; The minimum item level (included)
+                 300)))))   ; The maximum item level (included)
 
 ; A list containing every forbidden item.
 ; You can add entries to ban that item from the auction.
@@ -181,4 +181,6 @@
                "49640" ;Essence or Dust (?)
                "49334" ;Scale of Onyxia 2.0!!!
                )
-         (get-items "name LIKE \"%zzold%\"")))
+         (get-items "name LIKE \"%zzold%\"")
+         (get-items "name LIKE \"%Rod%\"") ; should be made by a blacksmith
+         ))

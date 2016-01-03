@@ -5,7 +5,10 @@
 ; Integer Integer List -> Integer
 ; Return the price of the item
 (define (get-price subclass ilevel price-list)
-  (* (list-ref price-list subclass) ilevel))
+  (local ([define ilvlmod (expt ilevel 3)])
+  (* (list-ref price-list subclass)
+     (cond [(>= ilvlmod 200) (quotient ilvlmod 200)]
+           [else ilvlmod]))))
 
 ; Final price with 1 gold random
 (define (final-price item class subclass quality ilevel stack)
@@ -14,7 +17,7 @@
     (* stack
        (+ (random 10000)
           (if (list? fixed-price?)
-              (* ilevel (second fixed-price?))
+              (second fixed-price?)
               (get-price subclass
                          ilevel
                          (get-price-list class
