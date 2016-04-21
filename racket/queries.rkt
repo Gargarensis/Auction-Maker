@@ -1,8 +1,8 @@
 #lang racket
 (require db)
 (provide (all-defined-out))
-
 (require "config.rkt")
+
 
 ; Create a list of item's entry given some conditions.
 (define (list-of-items class subclass quality ilevelmin ilevelmax)

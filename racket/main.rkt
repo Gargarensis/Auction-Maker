@@ -1,7 +1,8 @@
 #lang racket
 (require "functions.rkt")
 (require "queries.rkt")
-(require "lists.rkt")
+(require "config.rkt")
+(require "list.rkt")
 (require db)
 
 ; The output file.

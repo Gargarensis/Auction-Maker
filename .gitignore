@@ -39,4 +39,5 @@ Thumbs.db
 
 /racket/compiled/
 /racket/config.rkt
+/racket/list.rkt
 /usr/

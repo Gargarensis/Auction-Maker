@@ -1,6 +1,7 @@
 #lang racket
 (provide (all-defined-out))
-(require "lists.rkt")
+(require "config.rkt")
+(require "list.rkt")
 
 ; Integer Integer List -> Integer
 ; Return the price of the item
