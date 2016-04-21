@@ -2,18 +2,7 @@
 (require db)
 (provide (all-defined-out))
 
-; SQL connection
-(define world
-  (mysql-connect #:server "localhost"
-                 #:database "world"
-                 #:user "root"
-                 #:password "mangos"))
-
-(define character
-  (mysql-connect #:server "localhost"
-                 #:database "characters"
-                 #:user "root"
-                 #:password "mangos"))
+(require "config.rkt")
 
 ; Create a list of item's entry given some conditions.
 (define (list-of-items class subclass quality ilevelmin ilevelmax)
@@ -46,7 +35,7 @@
               world
               (string-append
                "SELECT class, subclass, quality, itemlevel, stackable "
-               "FROM world.item_template WHERE entry = "
+               "FROM item_template WHERE entry = "
                (number->string entry) ";"))))]
     (make-item-data (first data)
                     (second data)

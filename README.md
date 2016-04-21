@@ -1,3 +1,3 @@
 # Auction-Maker
 
-To modify the prices, edit the lists.rkt file.
+To modify the prices, rename config.rkt.dist in config.rkt and edit.

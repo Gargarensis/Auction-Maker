@@ -1,6 +1,20 @@
 #lang racket
-(provide (all-defined-out))
+(require db)
 (require "queries.rkt")
+(provide (all-defined-out))
+
+; SQL connection
+(define world
+  (mysql-connect #:server "localhost"
+                 #:database "world"
+                 #:user "user"
+                 #:password "pass"))
+
+(define character
+  (mysql-connect #:server "localhost"
+                 #:database "chars"
+                 #:user "user"
+                 #:password "pass"))
 
 
 (define UNUSED 10)
