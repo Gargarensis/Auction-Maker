@@ -90,15 +90,15 @@
           (define stack (make-stack item (item-data-stackable i-data)))
           (define price (make-price item stack i-data))]
     (string-append
-     "INSERT INTO characters.item_instance
-(guid, itemEntry, count, enchantments) VALUES ("
+     "INSERT INTO characters.item_instance"
+     "(guid, itemEntry, count, enchantments) VALUES ("
      (number->string guid) ", "
      (number->string item) ", "
      (number->string stack) ", "
-     "\"0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
- 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0\");"
-     "\nINSERT INTO characters.auctionhouse (id, houseid, itemguid, itemowner,
- buyoutprice, time, buyguid, lastbid, startbid, deposit) VALUES ("
+     "\"0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
+     " 0 0 0 0 0 0 0 0 0 0\");"
+     "\nINSERT INTO characters.auctionhouse (id, houseid, itemguid, itemowner, "
+     "buyoutprice, time, buyguid, lastbid, startbid, deposit) VALUES ("
      (number->string (make-id item)) ", "
      "7, " ;houseid 7 = neutral gadgetzan
      (number->string guid) ", "
