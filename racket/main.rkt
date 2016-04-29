@@ -5,12 +5,18 @@
 (require "list.rkt")
 (require db)
 
+
+(define pre-out (open-output-file "./output.sql" #:exists 'replace))
+(display "-- Auction House Bot\n\n" pre-out)
+(close-output-port pre-out)
 ; The output file.
 (define out (open-output-file "./output.sql" #:exists 'append))
 
 ; Not the scheme way, but i used some variables to avoid repetitions of queries
 (define ID -1)
 (define GUID -1)
+(define GUID-GAP 1000)
+(define INCREMENT 0)
 
 ; Given the entry, generate an ID for the item.
 (define (make-id item)
@@ -30,8 +36,8 @@
     (if (= GUID -1)
         (set! GUID (if (sql-null? maxguid)
                        1
-                       (add1 maxguid)))
-        (set! GUID (add1 GUID)))
+                       (+ GUID-GAP maxguid 1)))
+        (set! GUID (+ GUID-GAP GUID 1)))
     GUID))
 
 ; Integer Integer item-data -> Integer
@@ -53,7 +59,7 @@
 
 ; Generate the bid price for the auction.
 (define (make-bid-price price)
-  (quotient price 2)) ;temp
+  (* (quotient price 4) 3)) ;temp: 3/4
 
 ; Integer -> Integer
 ; Given the entry, return the maximum number of stack for the item
@@ -90,19 +96,20 @@
           (define i-data (get-item-data item))
           (define stack (make-stack item (item-data-stackable i-data)))
           (define price (make-price item stack i-data))]
+    (set! INCREMENT (add1 INCREMENT))
     (string-append
-     "INSERT INTO characters.item_instance"
-     "(guid, itemEntry, count, enchantments) VALUES ("
-     (number->string guid) ", "
+     "INSERT INTO item_instance"
+     "(guid, itemEntry, count, enchantments) VALUES (@maxguid+"
+     (number->string INCREMENT) ", "
      (number->string item) ", "
      (number->string stack) ", "
      "\"0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
      " 0 0 0 0 0 0 0 0 0 0\");"
-     "\nINSERT INTO characters.auctionhouse (id, houseid, itemguid, itemowner, "
-     "buyoutprice, time, buyguid, lastbid, startbid, deposit) VALUES ("
-     (number->string (make-id item)) ", "
-     "7, " ;houseid 7 = neutral gadgetzan
-     (number->string guid) ", "
+     "\nINSERT INTO auctionhouse (id, houseid, itemguid, itemowner, "
+     "buyoutprice, time, buyguid, lastbid, startbid, deposit) VALUES (@maxid+"
+     (number->string INCREMENT) ", "
+     "7, @maxguid+" ;houseid 7 = neutral gadgetzan
+     (number->string INCREMENT) ", "
      "0, "
      (number->string price) ", "
      (number->string make-time) ", "
@@ -123,6 +130,10 @@
     (for/list ([i count])(make-query-auction entry))))
 
 ; output
+(display
+ (string-append
+  "SET @maxguid := (SELECT IFNULL(MAX(guid),0) FROM item_instance)+1000;"
+  "\nSET @maxid := (SELECT IFNULL(MAX(id),0) FROM auctionhouse)+1000;\n\n") out)
 (for-each
  (lambda (result) (display (foldr string-append "" result) out))
  (map make-result
